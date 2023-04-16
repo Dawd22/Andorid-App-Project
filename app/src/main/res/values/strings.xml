@@ -3,4 +3,7 @@
     <string name="password">Jelszó</string>
     <string name="email">Email cím</string>
     <string name="login">Bejelentkezés</string>
+    <string name="signup">Regisztráció</string>
+    <string name="username">Felhasználó neve</string>
+    <string name="cancel">Mégse</string>
 </resources>
