@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void signup(View view) {
+    public void signupPage(View view) {
         Intent signupIntent = new Intent(this, Signup.class);
         signupIntent.putExtra("SECRET_KEY", SECRET_KEY);
         //TODO.

@@ -11,11 +11,11 @@
         android:id="@+id/editTextEmail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="32dp"
+        android:layout_marginBottom="20dp"
         android:ems="10"
         android:hint="@string/email"
         android:inputType="textEmailAddress"
-        android:layout_marginTop="70dp"
+        android:layout_marginTop="30dp"
         app:layout_constraintVertical_bias="0.345" />
 
     <EditText
@@ -33,9 +33,17 @@
         android:id="@+id/loginButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="1dp"
         android:onClick="login"
         android:text="@string/login"
+        app:layout_constraintVertical_bias="0.315" />
+    <Button
+        android:id="@+id/signupButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="1dp"
+        android:onClick="signupPage"
+        android:text="@string/signup"
         app:layout_constraintVertical_bias="0.315" />
 </LinearLayout>
 
