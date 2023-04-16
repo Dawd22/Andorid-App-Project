@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "208047412939",
+    "project_id": "angular-szallashely",
+    "storage_bucket": "angular-szallashely.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:208047412939:android:c50f3c8568304dd872ad4e",
+        "android_client_info": {
+          "package_name": "com.example.szallashelyfoglalas"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "208047412939-muaug3rt4rb26mvl3nkf9ltqddj006uo.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.szallashelyfoglalas",
+            "certificate_hash": "84b54bbb474c363e60df7ae588ba90e48d8562fc"
+          }
+        },
+        {
+          "client_id": "208047412939-b39ph8tb4v5v8lgcdbeb9bit39166v2c.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC_Rg-C6oG_PE82pCikaU52Z6NbjhbjP6I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "208047412939-b39ph8tb4v5v8lgcdbeb9bit39166v2c.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
