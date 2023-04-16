@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="@dimen/default_margin"
         android:text="@string/signup"
         android:textAlignment="center"
         android:textSize="18pt" />
@@ -24,9 +24,9 @@
         android:layout_below="@id/signupTextView"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginLeft="15dp"
-        android:layout_marginTop="45dp"
-        android:layout_marginRight="15dp"
+        android:layout_marginLeft="@dimen/margin_gap"
+        android:layout_marginTop="@dimen/top_gap"
+        android:layout_marginRight="@dimen/margin_gap"
         android:hint="@string/username"
         android:inputType="textPersonName" />
 
@@ -37,9 +37,9 @@
         android:layout_below="@id/usernameEditText"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginLeft="15dp"
-        android:layout_marginTop="45dp"
-        android:layout_marginRight="15dp"
+        android:layout_marginLeft="@dimen/margin_gap"
+        android:layout_marginTop="@dimen/top_gap"
+        android:layout_marginRight="@dimen/margin_gap"
         android:hint="@string/email"
         android:inputType="textEmailAddress" />
 
@@ -50,9 +50,9 @@
         android:layout_below="@id/emailEditText"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginLeft="15dp"
-        android:layout_marginTop="45dp"
-        android:layout_marginRight="15dp"
+        android:layout_marginLeft="@dimen/margin_gap"
+        android:layout_marginTop="@dimen/top_gap"
+        android:layout_marginRight="@dimen/margin_gap"
         android:hint="@string/password"
         android:inputType="textPassword" />
 
@@ -61,7 +61,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/passwordEditText"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="45dp"
+        android:layout_marginTop="@dimen/top_gap"
         android:orientation="horizontal">
 
         <Button
