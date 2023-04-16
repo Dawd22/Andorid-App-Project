@@ -6,4 +6,40 @@
     <string name="signup">Regisztráció</string>
     <string name="username">Felhasználó neve</string>
     <string name="cancel">Mégse</string>
+    <string name="hotel">Hotel</string>
+    <string name="price">Ár</string>
+    <string name="city">Város</string>
+    <string name="reservate">Foglalás</string>
+    <string name="country">Ország</string>
+    <string name="itemType">Szoba tipusa</string>
+    <string name="search">Keresés</string>
+    <string name="reservations">Foglalások</string>
+    <string name="logout">Kijelentkezés</string>
+    <string name="settings">Beállítások</string>
+
+    <string-array name="room_item_hotel">
+        <item>BudaiHotel</item>
+        <item>SzegediHotel</item>
+    </string-array>
+    <string-array name="room_item_price">
+        <item>1000</item>
+        <item>2000</item>
+    </string-array>
+    <string-array name="room_item_city">
+        <item>Budapest</item>
+        <item>Szeged</item>
+    </string-array>
+    <string-array name="room_item_country">
+        <item>Hungary</item>
+        <item>Hungary</item>
+    </string-array>
+    <string-array name="room_item_type">
+        <item>2 szobás</item>
+        <item>1 ágyas</item>
+    </string-array>
+    <string-array name="room_item_id">
+        <item>23432</item>
+        <item>234324</item>
+    </string-array>
+
 </resources>

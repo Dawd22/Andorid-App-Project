@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="8dp">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        
+        <TextView
+            android:id="@+id/itemHotel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:text="@string/hotel"
+            android:textColor="?android:textColorSecondary" />
+        <TextView
+            android:id="@+id/itemPrice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:text="@string/price"
+            android:layout_below="@id/itemType"
+            android:textColor="@color/gold" />
+        <TextView
+            android:id="@+id/itemCountry"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:text="@string/country"
+            android:layout_below="@id/itemHotel"
+            android:textColor="?android:textColorSecondary" />
+        <TextView
+            android:id="@+id/itemType"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:text="@string/itemType"
+            android:layout_below="@id/itemCity"
+            android:textColor="?android:textColorSecondary" />
+        <TextView
+            android:id="@+id/itemCity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:text="@string/city"
+            android:layout_below="@id/itemCountry"
+            android:textColor="?android:textColorSecondary" />
+        <Button
+            android:id="@+id/reservation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/itemPrice"
+            android:layout_centerHorizontal="true"
+            android:text="@string/reservate"
+            />
+    </RelativeLayout>
+
+</androidx.cardview.widget.CardView>
