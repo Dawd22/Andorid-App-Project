@@ -14,8 +14,13 @@ import android.view.MenuItem;
 
 import androidx.appcompat.widget.SearchView;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
@@ -26,8 +31,10 @@ public class RoomList extends AppCompatActivity {
     private RoomItemAdapter rAdapter;
     private int gridNumber = 1;
     private FirebaseUser user;
-    private boolean viewRow = true;
+    private boolean viewRow = false;
     private static final String LOG_TAG = RoomList.class.getName();
+    private FirebaseFirestore mFirestore;
+    private CollectionReference mItems;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,23 +53,48 @@ public class RoomList extends AppCompatActivity {
         mItemList = new ArrayList<>();
         rAdapter = new RoomItemAdapter(this, mItemList);
         mRecyclerView.setAdapter(rAdapter);
-        inicializeDate();
+        mFirestore = FirebaseFirestore.getInstance();
+        mItems = mFirestore.collection("Rooms");
+        queryData();
     }
+    private void queryData(){
+        mItemList.clear();
 
+        mItems.orderBy("hotel")
+                        .limit(10)
+                        .get()
+                        .addOnSuccessListener(queryDocumentSnapshots -> {
+                         for (QueryDocumentSnapshot document: queryDocumentSnapshots)
+                         {
+                             RoomItem item = document.toObject(RoomItem.class);
+                             mItemList.add(item);
+                         }
+                         if(mItemList.size() ==0){
+                             inicializeDate();
+                             queryData();
+                         }
+                            rAdapter.notifyDataSetChanged();
+                        });
+    }
     private void inicializeDate() {
+        mItemList.clear();
         String[] itemHotel = getResources().getStringArray(R.array.room_item_hotel);
         String[] itemType = getResources().getStringArray(R.array.room_item_type);
         String[] itemPrice = getResources().getStringArray(R.array.room_item_price);
         String[] itemCountry = getResources().getStringArray(R.array.room_item_country);
         String[] itemCity = getResources().getStringArray(R.array.room_item_city);
         String[] itemid = getResources().getStringArray(R.array.room_item_id);
-        mItemList.clear();
+
+        //feltöltés példa::
         for (int i = 0; i < itemHotel.length; i++) {
             Location x = new Location(itemCity[i], itemCountry[i]);
             int price = Integer.parseInt(itemPrice[i]);
-            mItemList.add(new RoomItem(itemHotel[i], itemid[i], x, price, itemType[i]));
+            mItems.add(new RoomItem(itemHotel[i],
+                    itemid[i],
+                    x,
+                    price,
+                    itemType[i]));
         }
-        rAdapter.notifyDataSetChanged();
     }
 
     @Override

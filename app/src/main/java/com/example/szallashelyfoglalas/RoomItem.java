@@ -7,6 +7,9 @@ public class RoomItem {
     private int price;
     private String type;
 
+    public RoomItem() {
+    }
+
     public RoomItem(String hotel, String id, Location location, int price, String type) {
         this.hotel = hotel;
         this.id = id;
