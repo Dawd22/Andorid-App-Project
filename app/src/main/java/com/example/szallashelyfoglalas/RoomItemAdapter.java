@@ -103,8 +103,7 @@ public class RoomItemAdapter extends RecyclerView.Adapter<RoomItemAdapter.ViewHo
             mCityText = itemView.findViewById(R.id.itemCity);
             mCountryText = itemView.findViewById(R.id.itemCountry);
             mTypeText = itemView.findViewById(R.id.itemType);
-            firstday = itemView.findViewById(R.id.firstday);
-            lastday = itemView.findViewById(R.id.lastday);
+
         }
 
         public void bindTo(RoomItem currentItem) {
@@ -114,12 +113,20 @@ public class RoomItemAdapter extends RecyclerView.Adapter<RoomItemAdapter.ViewHo
             mCountryText.setText(currentItem.getLocation().getCountry());
             mTypeText.setText(currentItem.getType());
 
-            itemView.findViewById(R.id.delete).setOnClickListener(view -> ((RoomList) mContext).deleteItem(currentItem));
-            itemView.findViewById(R.id.reservation).setOnClickListener(view -> {
-                Log.d("Activity", "Megnyomtuk a gombot");
-                Log.d("Activity", ""+ firstday.getYear()+" "+ (firstday.getMonth()+1)+" " + firstday.getDayOfMonth());
-                Log.d("Activity", ""+ lastday.getYear()+" "+ (lastday.getMonth()+1)+" " + lastday.getDayOfMonth());
-            });
+            itemView.findViewById(R.id.delete)
+                    .setOnClickListener(view
+                            -> ((RoomList) mContext)
+                            .deleteItem(currentItem));
+
+            firstday = itemView.findViewById(R.id.firstday);
+            lastday = itemView.findViewById(R.id.lastday);
+
+            itemView
+                    .findViewById(R.id.reservation)
+                    .setOnClickListener(view
+                            -> ((RoomList) mContext)
+                            .reservation(currentItem,firstday,lastday));
+
         }
     }
 

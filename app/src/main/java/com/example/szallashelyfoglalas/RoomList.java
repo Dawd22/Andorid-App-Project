@@ -16,16 +16,21 @@ import android.widget.Toast;
 
 import androidx.appcompat.widget.SearchView;
 
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 public class RoomList extends AppCompatActivity {
 
@@ -72,15 +77,22 @@ public class RoomList extends AppCompatActivity {
                          for (QueryDocumentSnapshot document: queryDocumentSnapshots)
                          {
                              RoomItem item = document.toObject(RoomItem.class);
+                             item.setId(document.getId());
                              mItemList.add(item);
                          }
-                         if(mItemList.size() ==0){
+                         if(mItemList.size() == 0){
                              inicializeDate();
                              queryData();
                          }
                             rAdapter.notifyDataSetChanged();
                         });
     }
+
+    public boolean checkDate(Date endDay,Date firstday,Date startDay,Date lastday){
+
+        return !(endDay.getTime() <= firstday.getTime() || startDay.getTime() >= lastday.getTime() || endDay.getTime() <= startDay.getTime());
+    }
+
     public void deleteItem(RoomItem item){
 
         DocumentReference ref = mItems.document(item.getId());
@@ -89,11 +101,80 @@ public class RoomList extends AppCompatActivity {
             Log.d(LOG_TAG, "Töröltük"+ item.getId());
         }).addOnFailureListener(failure ->{
             Toast.makeText(this, "Nem sikerült törölni ezt: " + item.getId(), Toast.LENGTH_SHORT).show();
+        }).addOnCompleteListener(task ->{
+            if(task.isSuccessful())
+                queryData();
         });
-        queryData();
     }
-    public void reservation(RoomItem item){
+    public void reservation(RoomItem item, DatePicker firstday, DatePicker lastday){
+       mReservations
+               .whereEqualTo("room_id",item.getId())
+               .get().addOnSuccessListener(queryDocumentSnapshots -> {
+                   boolean free = true;
+                   int yearFirst =firstday.getYear();
+                   int monthFirst = firstday.getMonth();
+                   int dayFirst = firstday.getDayOfMonth();
+                   Calendar calendarFirst = Calendar.getInstance();
+                   calendarFirst.set(yearFirst,monthFirst,dayFirst);
+                   Date startDay = calendarFirst.getTime();
+                    startDay.setHours(14);
+                    startDay.setMinutes(0);
 
+                   int yearSecond = lastday.getYear();
+                   int monthSecond = lastday.getMonth();
+                   int daySecond = lastday.getDayOfMonth();
+                   Calendar calendarSecond = Calendar.getInstance();
+                   calendarFirst.set(yearSecond,monthSecond,daySecond);
+                   Date endDay = calendarSecond.getTime();
+                   endDay.setHours(9);
+                   endDay.setMinutes(0);
+
+                   long diffInMs = Math.abs(endDay.getTime() - startDay.getTime());
+                   long diffInDays = TimeUnit.MILLISECONDS.toDays(diffInMs);
+                   int full_price = ((int)diffInDays+1) * item.getPrice();
+
+                   if(!queryDocumentSnapshots.isEmpty()){
+                   for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                       Reservation reservation = document.toObject(Reservation.class);
+
+                       System.out.println(startDay.getTime()+" "+ reservation.firstday.getTime()+ " "+ endDay.getTime()+ " " +reservation.lastday.getTime());
+
+                       if(checkDate(endDay, reservation.firstday, startDay, reservation.lastday)){
+                           free = false;
+                           break;
+                       }
+                   }
+                   if(free){
+                       Reservation newReservation
+                               = new Reservation(startDay,endDay,"",full_price,item.getHotel(),item.getId(),item.getType(), user.getEmail());
+                       mReservations.add(newReservation).addOnSuccessListener(documentReference -> {
+                           Log.d(LOG_TAG,"Sikerült a foglalás!");
+                           newReservation.setId(documentReference.getId());
+                           documentReference.set(newReservation);
+                       }).addOnFailureListener(e -> Log.d(LOG_TAG,"Nem sikerült a foglalás!"));
+                   }
+                   else{
+                       Log.d(LOG_TAG,"Foglalt a szoba!");
+                   }
+                   }
+                   else{
+
+                       if ( endDay.getTime() <= startDay.getTime()) {
+
+                           Reservation newReservation
+                                   = new Reservation(startDay,endDay,"",full_price,item.getHotel(),item.getId(),item.getType(), user.getEmail());
+                           mReservations.add(newReservation).addOnSuccessListener(documentReference -> {
+                               Log.d(LOG_TAG,"Sikerült a foglalás!");
+                               newReservation.setId(documentReference.getId());
+                               documentReference.set(newReservation);
+                           }).addOnFailureListener(e -> Log.d(LOG_TAG,"Nem sikerült a foglalás!"));
+                       }
+                       else{
+                           Log.d(LOG_TAG,"Dátumok nem megfelelőek!");
+                       }
+
+                   }
+               }).addOnFailureListener(e -> Log.e(LOG_TAG,"Nem sikerült a keresés"));
     }
     public void updateItem(RoomItem item){
 
