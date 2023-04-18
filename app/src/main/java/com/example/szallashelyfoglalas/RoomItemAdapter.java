@@ -22,8 +22,7 @@ public class RoomItemAdapter extends RecyclerView.Adapter<RoomItemAdapter.ViewHo
     private ArrayList<RoomItem> mRoomItemsDataAll;
     private Context mContext;
     private int lastPosition = -1;
-    private DatePicker firstday;
-    private DatePicker lastday;
+
     RoomItemAdapter(Context context, ArrayList<RoomItem> itemsData) {
         this.mRoomItemsData = itemsData;
         this.mContext = context;
@@ -94,6 +93,9 @@ public class RoomItemAdapter extends RecyclerView.Adapter<RoomItemAdapter.ViewHo
         private TextView mCountryText;
         private TextView mTypeText;
 
+        private DatePicker firstday;
+        private DatePicker lastday;
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             mHotelText = itemView.findViewById(R.id.itemHotel);
@@ -115,8 +117,8 @@ public class RoomItemAdapter extends RecyclerView.Adapter<RoomItemAdapter.ViewHo
             itemView.findViewById(R.id.delete).setOnClickListener(view -> ((RoomList) mContext).deleteItem(currentItem));
             itemView.findViewById(R.id.reservation).setOnClickListener(view -> {
                 Log.d("Activity", "Megnyomtuk a gombot");
-                Log.d("Activity", ""+ firstday.getYear()+" "+ firstday.getMonth()+" " + firstday.getDayOfMonth());
-                Log.d("Activity", ""+ lastday.getYear()+" "+ lastday.getMonth()+" " + lastday.getDayOfMonth());
+                Log.d("Activity", ""+ firstday.getYear()+" "+ (firstday.getMonth()+1)+" " + firstday.getDayOfMonth());
+                Log.d("Activity", ""+ lastday.getYear()+" "+ (lastday.getMonth()+1)+" " + lastday.getDayOfMonth());
             });
         }
     }
