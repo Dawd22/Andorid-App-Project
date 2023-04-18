@@ -11,6 +11,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.DatePicker;
+import android.widget.Toast;
 
 import androidx.appcompat.widget.SearchView;
 
@@ -18,6 +20,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -35,6 +38,7 @@ public class RoomList extends AppCompatActivity {
     private static final String LOG_TAG = RoomList.class.getName();
     private FirebaseFirestore mFirestore;
     private CollectionReference mItems;
+    private CollectionReference mReservations;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +51,6 @@ public class RoomList extends AppCompatActivity {
             Log.d(LOG_TAG, "Nincs bejelentkezett felhasználó!");
             finish();
         }
-
         mRecyclerView = findViewById(R.id.recyclerView);
         mRecyclerView.setLayoutManager(new GridLayoutManager(this, gridNumber));
         mItemList = new ArrayList<>();
@@ -55,6 +58,8 @@ public class RoomList extends AppCompatActivity {
         mRecyclerView.setAdapter(rAdapter);
         mFirestore = FirebaseFirestore.getInstance();
         mItems = mFirestore.collection("Rooms");
+        mReservations = mFirestore.collection("Reservations");
+
         queryData();
     }
     private void queryData(){
@@ -75,6 +80,23 @@ public class RoomList extends AppCompatActivity {
                          }
                             rAdapter.notifyDataSetChanged();
                         });
+    }
+    public void deleteItem(RoomItem item){
+
+        DocumentReference ref = mItems.document(item.getId());
+
+        ref.delete().addOnSuccessListener(success ->{
+            Log.d(LOG_TAG, "Töröltük"+ item.getId());
+        }).addOnFailureListener(failure ->{
+            Toast.makeText(this, "Nem sikerült törölni ezt: " + item.getId(), Toast.LENGTH_SHORT).show();
+        });
+        queryData();
+    }
+    public void reservation(RoomItem item){
+
+    }
+    public void updateItem(RoomItem item){
+
     }
     private void inicializeDate() {
         mItemList.clear();

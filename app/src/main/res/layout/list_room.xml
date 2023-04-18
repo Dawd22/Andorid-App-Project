@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:layout_margin="8dp">
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        
+
         <TextView
             android:id="@+id/itemHotel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_margin="5dp"
             android:padding="8dp"
             android:text="@string/hotel"
             android:textColor="?android:textColorSecondary" />
@@ -18,6 +19,7 @@
             android:id="@+id/itemPrice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_margin="5dp"
             android:padding="8dp"
             android:text="@string/price"
             android:layout_below="@id/itemType"
@@ -26,6 +28,7 @@
             android:id="@+id/itemCountry"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_margin="5dp"
             android:padding="8dp"
             android:text="@string/country"
             android:layout_below="@id/itemHotel"
@@ -34,6 +37,7 @@
             android:id="@+id/itemType"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_margin="5dp"
             android:padding="8dp"
             android:text="@string/itemType"
             android:layout_below="@id/itemCity"
@@ -42,18 +46,63 @@
             android:id="@+id/itemCity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_margin="5dp"
             android:padding="8dp"
             android:text="@string/city"
             android:layout_below="@id/itemCountry"
             android:textColor="?android:textColorSecondary" />
-        <Button
-            android:id="@+id/reservation"
+    <RelativeLayout
+        android:id="@+id/dates"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/itemPrice"
+        android:layout_centerHorizontal="true">
+
+        <DatePicker
+            android:id="@+id/firstday"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/itemPrice"
-            android:layout_centerHorizontal="true"
-            android:text="@string/reservate"
-            />
+            android:layout_height="153dp"
+            android:layout_margin="2dp"
+            android:calendarViewShown="false"
+            android:datePickerMode="spinner">
+
+        </DatePicker>
+        <DatePicker
+            android:id="@+id/lastday"
+            android:layout_width="wrap_content"
+            android:layout_below="@id/firstday"
+            android:layout_height="153dp"
+            android:layout_margin="2dp"
+            android:datePickerMode="spinner"
+            android:calendarViewShown="false"
+            >
+        </DatePicker>
+
+    </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/dates"
+                android:layout_centerHorizontal="true">
+                <Button
+                    android:id="@+id/reservation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="3dp"
+                    android:layout_margin="3dp"
+                    android:text="@string/reservate"
+                    />
+
+                <Button
+                    android:id="@+id/delete"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="3dp"
+                    android:layout_margin="3dp"
+                    android:text="@string/delete"
+                    />
+            </LinearLayout>
     </RelativeLayout>
 
 </androidx.cardview.widget.CardView>

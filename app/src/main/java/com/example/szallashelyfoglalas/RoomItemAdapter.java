@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.DatePicker;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.TextView;
@@ -21,7 +22,8 @@ public class RoomItemAdapter extends RecyclerView.Adapter<RoomItemAdapter.ViewHo
     private ArrayList<RoomItem> mRoomItemsDataAll;
     private Context mContext;
     private int lastPosition = -1;
-
+    private DatePicker firstday;
+    private DatePicker lastday;
     RoomItemAdapter(Context context, ArrayList<RoomItem> itemsData) {
         this.mRoomItemsData = itemsData;
         this.mContext = context;
@@ -99,13 +101,8 @@ public class RoomItemAdapter extends RecyclerView.Adapter<RoomItemAdapter.ViewHo
             mCityText = itemView.findViewById(R.id.itemCity);
             mCountryText = itemView.findViewById(R.id.itemCountry);
             mTypeText = itemView.findViewById(R.id.itemType);
-
-            itemView.findViewById(R.id.reservation).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Log.d("Activity", "Megnyomtuk a gombot");
-                }
-            });
+            firstday = itemView.findViewById(R.id.firstday);
+            lastday = itemView.findViewById(R.id.lastday);
         }
 
         public void bindTo(RoomItem currentItem) {
@@ -114,6 +111,13 @@ public class RoomItemAdapter extends RecyclerView.Adapter<RoomItemAdapter.ViewHo
             mCityText.setText(currentItem.getLocation().getCity());
             mCountryText.setText(currentItem.getLocation().getCountry());
             mTypeText.setText(currentItem.getType());
+
+            itemView.findViewById(R.id.delete).setOnClickListener(view -> ((RoomList) mContext).deleteItem(currentItem));
+            itemView.findViewById(R.id.reservation).setOnClickListener(view -> {
+                Log.d("Activity", "Megnyomtuk a gombot");
+                Log.d("Activity", ""+ firstday.getYear()+" "+ firstday.getMonth()+" " + firstday.getDayOfMonth());
+                Log.d("Activity", ""+ lastday.getYear()+" "+ lastday.getMonth()+" " + lastday.getDayOfMonth());
+            });
         }
     }
 

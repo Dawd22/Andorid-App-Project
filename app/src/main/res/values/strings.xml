@@ -16,6 +16,7 @@
     <string name="reservations">Foglalások</string>
     <string name="logout">Kijelentkezés</string>
     <string name="settings">Beállítások</string>
+    <string name="delete">Törlés</string>
 
     <string-array name="room_item_hotel">
         <item>BudaiHotel</item>
