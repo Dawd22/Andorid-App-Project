@@ -21,8 +21,9 @@ public class NotificationHandler {
 
         createChannel();
     }
-    private void createChannel(){
-        if(Build.VERSION.SDK_INT< Build.VERSION_CODES.O)
+
+    private void createChannel() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O)
             return;
 
         NotificationChannel channel =
@@ -36,7 +37,8 @@ public class NotificationHandler {
         channel.setDescription("Foglalás történt");
         this.mManager.createNotificationChannel(channel);
     }
-    public void send(String message){
+
+    public void send(String message) {
         NotificationCompat.Builder builder = new NotificationCompat
                 .Builder(mContext, CHANNEL_ID)
                 .setContentTitle("Foglalás")

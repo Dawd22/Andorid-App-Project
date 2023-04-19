@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
                     Log.d(LOG_TAG, "Sikeres bejelentkezni");
                     startRoom();
                 }
-                else{
+                else {
                     Log.d(LOG_TAG, "Nem sikerült bejelentkezni");
                     Toast.makeText(MainActivity.this, "Nem sikerült bejelentkezni:" + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                 }

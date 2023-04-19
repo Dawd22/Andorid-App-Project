@@ -33,14 +33,14 @@ public class RoomItemAdapter extends RecyclerView.Adapter<RoomItemAdapter.ViewHo
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ViewHolder(LayoutInflater.from(mContext).inflate(R.layout.list_room,parent,false));
+        return new ViewHolder(LayoutInflater.from(mContext).inflate(R.layout.list_room, parent, false));
     }
 
     @Override
     public void onBindViewHolder(RoomItemAdapter.ViewHolder holder, int position) {
         RoomItem currentItem = mRoomItemsData.get(position);
         holder.bindTo(currentItem);
-        if(holder.getAdapterPosition()> lastPosition){
+        if (holder.getAdapterPosition() > lastPosition) {
             Animation animation = AnimationUtils.loadAnimation(mContext, R.anim.slide_in_row);
             holder.itemView.startAnimation(animation);
             lastPosition = holder.getAdapterPosition();
@@ -125,7 +125,7 @@ public class RoomItemAdapter extends RecyclerView.Adapter<RoomItemAdapter.ViewHo
                     .findViewById(R.id.reservation)
                     .setOnClickListener(view
                             -> ((RoomList) mContext)
-                            .reservation(currentItem,firstday,lastday));
+                            .reservation(currentItem, firstday, lastday));
 
         }
     }

@@ -73,11 +73,11 @@ public class Signup extends AppCompatActivity {
 
         nAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, task -> {
             if (task.isSuccessful()) {
-                User newUser = new User("",email,"user",username);
+                User newUser = new User("", email, "user", username);
                 mUsers.add(newUser).addOnSuccessListener(documentReference -> {
                     Log.d(LOG_TAG, "Felhasználó feltöltve");
                     newUser.setId(documentReference.getId());
-                   documentReference.set(newUser);
+                    documentReference.set(newUser);
                 }).addOnFailureListener(e -> {
                     Log.d(LOG_TAG, "Felhasználó nem lett feltöltve");
                 });
