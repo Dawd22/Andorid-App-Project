@@ -71,25 +71,22 @@ public class Signup extends AppCompatActivity {
                 + " Felhasznaló neve: "
                 + username);
 
-        nAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if (task.isSuccessful()) {
-                    User newUser = new User("",email,"user",username);
-                    mUsers.add(newUser).addOnSuccessListener(documentReference -> {
-                        Log.d(LOG_TAG, "Felhasználó feltöltve");
-                        newUser.setId(documentReference.getId());
-                       documentReference.set(newUser);
-                    }).addOnFailureListener(e -> {
-                        Log.d(LOG_TAG, "Felhasználó nem lett feltöltve");
-                    });
+        nAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, task -> {
+            if (task.isSuccessful()) {
+                User newUser = new User("",email,"user",username);
+                mUsers.add(newUser).addOnSuccessListener(documentReference -> {
+                    Log.d(LOG_TAG, "Felhasználó feltöltve");
+                    newUser.setId(documentReference.getId());
+                   documentReference.set(newUser);
+                }).addOnFailureListener(e -> {
+                    Log.d(LOG_TAG, "Felhasználó nem lett feltöltve");
+                });
 
-                    Log.d(LOG_TAG, "Felhasználó regisztrált sikeresen");
-                    startRoom();
-                } else {
-                    Log.d(LOG_TAG, "Nem sikerült regisztrálni");
-                    Toast.makeText(Signup.this, "Nem sikerült regisztrálni:" + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                }
+                Log.d(LOG_TAG, "Felhasználó regisztrált sikeresen");
+                startRoom();
+            } else {
+                Log.d(LOG_TAG, "Nem sikerült regisztrálni");
+                Toast.makeText(Signup.this, "Nem sikerült regisztrálni:" + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
 
