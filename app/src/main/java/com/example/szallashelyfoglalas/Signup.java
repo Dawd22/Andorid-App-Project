@@ -12,9 +12,14 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class Signup extends AppCompatActivity {
     private static final int SECRET_KEY = 101;
@@ -24,9 +29,10 @@ public class Signup extends AppCompatActivity {
     EditText usernameET;
     EditText userEmailET;
     EditText passwordET;
-
+    private FirebaseFirestore mFirestore;
     private SharedPreferences preferences;
     private FirebaseAuth nAuth;
+    private CollectionReference mUsers;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +51,9 @@ public class Signup extends AppCompatActivity {
         preferences = getSharedPreferences(PREF_KEY, MODE_PRIVATE);
         String email = preferences.getString("userEmail", "");
         String password = preferences.getString("password", "");
+        mFirestore = FirebaseFirestore.getInstance();
 
+        mUsers = mFirestore.collection("Users");
         userEmailET.setText(email);
         passwordET.setText(password);
         nAuth = FirebaseAuth.getInstance();
@@ -67,6 +75,15 @@ public class Signup extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
+                    User newUser = new User("",email,"user",username);
+                    mUsers.add(newUser).addOnSuccessListener(documentReference -> {
+                        Log.d(LOG_TAG, "Felhasználó feltöltve");
+                        newUser.setId(documentReference.getId());
+                       documentReference.set(newUser);
+                    }).addOnFailureListener(e -> {
+                        Log.d(LOG_TAG, "Felhasználó nem lett feltöltve");
+                    });
+
                     Log.d(LOG_TAG, "Felhasználó regisztrált sikeresen");
                     startRoom();
                 } else {

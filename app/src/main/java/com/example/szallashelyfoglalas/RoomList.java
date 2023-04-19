@@ -90,7 +90,7 @@ public class RoomList extends AppCompatActivity {
 
     public boolean checkDate(Date endDay,Date firstday,Date startDay,Date lastday){
 
-        return !(endDay.getTime() <= firstday.getTime() || startDay.getTime() >= lastday.getTime() || endDay.getTime() <= startDay.getTime());
+        return (endDay.getTime() <= firstday.getTime() || startDay.getTime() >= lastday.getTime());
     }
 
     public void deleteItem(RoomItem item){
@@ -116,18 +116,19 @@ public class RoomList extends AppCompatActivity {
                    int dayFirst = firstday.getDayOfMonth();
                    Calendar calendarFirst = Calendar.getInstance();
                    calendarFirst.set(yearFirst,monthFirst,dayFirst);
+                   calendarFirst.set(Calendar.HOUR_OF_DAY,12);
+                   calendarFirst.set(Calendar.MINUTE,0);
                    Date startDay = calendarFirst.getTime();
-                    startDay.setHours(14);
-                    startDay.setMinutes(0);
 
                    int yearSecond = lastday.getYear();
                    int monthSecond = lastday.getMonth();
                    int daySecond = lastday.getDayOfMonth();
                    Calendar calendarSecond = Calendar.getInstance();
                    calendarFirst.set(yearSecond,monthSecond,daySecond);
+                   calendarSecond.set(Calendar.HOUR_OF_DAY,7);
+                   calendarSecond.set(Calendar.MINUTE,0);
                    Date endDay = calendarSecond.getTime();
-                   endDay.setHours(9);
-                   endDay.setMinutes(0);
+
 
                    long diffInMs = Math.abs(endDay.getTime() - startDay.getTime());
                    long diffInDays = TimeUnit.MILLISECONDS.toDays(diffInMs);
@@ -139,7 +140,7 @@ public class RoomList extends AppCompatActivity {
 
                        System.out.println(startDay.getTime()+" "+ reservation.firstday.getTime()+ " "+ endDay.getTime()+ " " +reservation.lastday.getTime());
 
-                       if(checkDate(endDay, reservation.firstday, startDay, reservation.lastday)){
+                       if(!checkDate(endDay, reservation.firstday, startDay, reservation.lastday)){
                            free = false;
                            break;
                        }
