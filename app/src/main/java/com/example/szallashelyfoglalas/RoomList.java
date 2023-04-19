@@ -44,7 +44,7 @@ public class RoomList extends AppCompatActivity {
     private FirebaseFirestore mFirestore;
     private CollectionReference mItems;
     private CollectionReference mReservations;
-
+    private NotificationHandler mNotificationHandler;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,7 +64,7 @@ public class RoomList extends AppCompatActivity {
         mFirestore = FirebaseFirestore.getInstance();
         mItems = mFirestore.collection("Rooms");
         mReservations = mFirestore.collection("Reservations");
-
+        mNotificationHandler = new NotificationHandler(this);
         queryData();
     }
     private void queryData(){
@@ -152,6 +152,7 @@ public class RoomList extends AppCompatActivity {
                            Log.d(LOG_TAG,"Sikerült a foglalás!");
                            newReservation.setId(documentReference.getId());
                            documentReference.set(newReservation);
+                           mNotificationHandler.send("Foglalás történt: "+ newReservation.room_hotel );
                        }).addOnFailureListener(e -> Log.d(LOG_TAG,"Nem sikerült a foglalás!"));
                    }
                    else{
