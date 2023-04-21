@@ -46,7 +46,8 @@ public class Reservations extends AppCompatActivity {
             Log.d(LOG_TAG, "Van bejelentkezett felhasználó!");
         } else {
             Log.d(LOG_TAG, "Nincs bejelentkezett felhasználó!");
-            finish();
+            Intent roomIntent = new Intent(this,MainActivity.class);
+            startActivity(roomIntent);
         }
         mRecyclerView = findViewById(R.id.recyclerView);
         mRecyclerView.setLayoutManager(new GridLayoutManager(this, gridNumber));
@@ -62,36 +63,43 @@ public class Reservations extends AppCompatActivity {
 
     private void queryData() {
         mItemList.clear();
+        new Thread(() -> {
+            mReservations.whereEqualTo("user_email", user.getEmail())
+                    .limit(10)
+                    .get()
+                    .addOnSuccessListener(queryDocumentSnapshots -> {
+                        for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                            Reservation item = document.toObject(Reservation.class);
+                            item.setId(document.getId());
+                            mItemList.add(item);
+                        }
+                        if (mItemList.size() == 0) {
+                            roomToRoom();
+                        }
+                        runOnUiThread(() -> {
+                            rAdapter.notifyDataSetChanged();
+                        });
+                    });
+        }).start();
 
-        mReservations.whereEqualTo("user_email", user.getEmail())
-                .limit(10)
-                .get()
-                .addOnSuccessListener(queryDocumentSnapshots -> {
-                    for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
-                        Reservation item = document.toObject(Reservation.class);
-                        item.setId(document.getId());
-                        mItemList.add(item);
-                    }
-                    if (mItemList.size() == 0) {
-                        roomToRoom();
-                    }
-                    rAdapter.notifyDataSetChanged();
-                });
     }
 
     public void deleteItem(Reservation item) {
 
         DocumentReference ref = mReservations.document(item.getId());
-
-        ref.delete().addOnSuccessListener(success -> {
-            Log.d(LOG_TAG, "Töröltük" + item.getId());
-        }).addOnFailureListener(failure -> {
-            Toast.makeText(this, "Nem sikerült törölni ezt: " + item.getId(), Toast.LENGTH_SHORT).show();
-            mNotificationHandler.send("Töröltük a föglalást");
-        }).addOnCompleteListener(task -> {
-            if (task.isSuccessful())
-                queryData();
-        });
+        new Thread(() -> {
+            ref.delete().addOnSuccessListener(success -> {
+                Log.d(LOG_TAG, "Töröltük" + item.getId());
+            }).addOnFailureListener(failure -> {
+                runOnUiThread(() -> {
+                    Toast.makeText(this, "Nem sikerült törölni ezt: " + item.getId(), Toast.LENGTH_SHORT).show();
+                });
+                mNotificationHandler.send("Töröltük a föglalást");
+            }).addOnCompleteListener(task -> {
+                if (task.isSuccessful())
+                    queryData();
+            });
+        }).start();
     }
 
     @Override
@@ -121,7 +129,8 @@ public class Reservations extends AppCompatActivity {
             case R.id.logout:
                 Log.d(LOG_TAG, "onOptionsItemSelected: logout");
                 FirebaseAuth.getInstance().signOut();
-                finish();
+                Intent roomIntent = new Intent(this,MainActivity.class);
+                startActivity(roomIntent);
                 return true;
             case R.id.reservations:
                 Log.d(LOG_TAG, "onOptionsItemSelected: reservations");

@@ -35,7 +35,8 @@ public class RoomAdd extends AppCompatActivity {
             Log.d(LOG_TAG, "Van bejelentkezett felhasználó!");
         } else {
             Log.d(LOG_TAG, "Nincs bejelentkezett felhasználó!");
-            finish();
+            Intent roomIntent = new Intent(this,MainActivity.class);
+            startActivity(roomIntent);
         }
         Hotel = findViewById(R.id.Hotel);
         City = findViewById(R.id.city);
@@ -56,13 +57,17 @@ public class RoomAdd extends AppCompatActivity {
         String type = Type.getText().toString();
         Location location = new Location(city, country);
         RoomItem newRoom = new RoomItem(hotel, "", location, price, type);
-        mItems.add(newRoom).addOnSuccessListener(documentReference -> {
-            newRoom.setId(documentReference.getId());
-            documentReference.set(newRoom);
-            mNotificationHandler.send("Új szoba hozzáadása megtörtént!");
-        }).addOnFailureListener(e -> {
-            Log.d(LOG_TAG, "Valami baj történt a hozzáadás során!");
+        Thread thread = new Thread(() ->{
+            mItems.add(newRoom).addOnSuccessListener(documentReference -> {
+                newRoom.setId(documentReference.getId());
+                documentReference.set(newRoom);
+                mNotificationHandler.send("Új szoba hozzáadása megtörtént!");
+            }).addOnFailureListener(e -> {
+                Log.d(LOG_TAG, "Valami baj történt a hozzáadás során!");
+            });
         });
+        thread.start();
+
     }
 
     public void cancel(View view) {

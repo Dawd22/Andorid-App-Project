@@ -41,19 +41,23 @@ public class MainActivity extends AppCompatActivity {
     public void login(View view) {
         String email = userEmailET.getText().toString();
         String password = passwordET.getText().toString();
-        nAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if (task.isSuccessful()) {
-                    Log.d(LOG_TAG, "Sikeres bejelentkezni");
-                    startRoom();
-                } else {
-                    Log.d(LOG_TAG, "Nem sikerült bejelentkezni");
-                    Toast.makeText(MainActivity.this, "Nem sikerült bejelentkezni:" + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+        if(email.equals("") || password.equals("") || email == null || password == null){
+            Log.d(LOG_TAG,"Figyelj oda, hogy ne legyen üres barátom");
+        }
+        else {
+            nAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                @Override
+                public void onComplete(@NonNull Task<AuthResult> task) {
+                    if (task.isSuccessful()) {
+                        Log.d(LOG_TAG, "Sikeres bejelentkezni");
+                        startRoom();
+                    } else {
+                        Log.d(LOG_TAG, "Nem sikerült bejelentkezni");
+                        Toast.makeText(MainActivity.this, "Nem sikerült bejelentkezni:" + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                    }
                 }
-            }
-        });
-
+            });
+        }
     }
 
     private void startRoom() {

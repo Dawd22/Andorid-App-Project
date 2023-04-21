@@ -1,5 +1,8 @@
 package com.example.szallashelyfoglalas;
 
+import android.animation.Animator;
+import android.animation.AnimatorInflater;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -111,7 +114,6 @@ public class RoomItemAdapter extends RecyclerView.Adapter<RoomItemAdapter.ViewHo
             mCityText.setText(currentItem.getLocation().getCity());
             mCountryText.setText(currentItem.getLocation().getCountry());
             mTypeText.setText(currentItem.getType());
-
             itemView.findViewById(R.id.delete)
                     .setOnClickListener(view
                             -> ((RoomList) mContext)
@@ -125,7 +127,6 @@ public class RoomItemAdapter extends RecyclerView.Adapter<RoomItemAdapter.ViewHo
                     .setOnClickListener(view
                             -> ((RoomList) mContext)
                             .reservation(currentItem, firstday, lastday));
-
         }
 
 

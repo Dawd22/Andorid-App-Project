@@ -64,32 +64,34 @@ public class Signup extends AppCompatActivity {
         String username = usernameET.getText().toString();
         String email = userEmailET.getText().toString();
         String password = passwordET.getText().toString();
+        if (username.equals("") || username == null || email.equals("") || email == null || password.equals("") || password == null) {
+            Log.d(LOG_TAG, "Figyelj oda pajtás hogy ne legyen üres");
+        } else {
+            Log.i(LOG_TAG, "Regisztrált: " + email
+                    + " Jelszó: "
+                    + password
+                    + " Felhasznaló neve: "
+                    + username);
 
-        Log.i(LOG_TAG, "Regisztrált: " + email
-                + " Jelszó: "
-                + password
-                + " Felhasznaló neve: "
-                + username);
+            nAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, task -> {
+                if (task.isSuccessful()) {
+                    User newUser = new User("", email, "user", username);
+                    mUsers.add(newUser).addOnSuccessListener(documentReference -> {
+                        Log.d(LOG_TAG, "Felhasználó feltöltve");
+                        newUser.setId(documentReference.getId());
+                        documentReference.set(newUser);
+                    }).addOnFailureListener(e -> {
+                        Log.d(LOG_TAG, "Felhasználó nem lett feltöltve");
+                    });
 
-        nAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, task -> {
-            if (task.isSuccessful()) {
-                User newUser = new User("", email, "user", username);
-                mUsers.add(newUser).addOnSuccessListener(documentReference -> {
-                    Log.d(LOG_TAG, "Felhasználó feltöltve");
-                    newUser.setId(documentReference.getId());
-                    documentReference.set(newUser);
-                }).addOnFailureListener(e -> {
-                    Log.d(LOG_TAG, "Felhasználó nem lett feltöltve");
-                });
-
-                Log.d(LOG_TAG, "Felhasználó regisztrált sikeresen");
-                startRoom();
-            } else {
-                Log.d(LOG_TAG, "Nem sikerült regisztrálni");
-                Toast.makeText(Signup.this, "Nem sikerült regisztrálni:" + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
-
+                    Log.d(LOG_TAG, "Felhasználó regisztrált sikeresen");
+                    startRoom();
+                } else {
+                    Log.d(LOG_TAG, "Nem sikerült regisztrálni");
+                    Toast.makeText(Signup.this, "Nem sikerült regisztrálni:" + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
     }
 
     public void cancel(View view) {

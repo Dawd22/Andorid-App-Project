@@ -56,7 +56,8 @@ public class RoomList extends AppCompatActivity {
             Log.d(LOG_TAG, "Van bejelentkezett felhasználó!");
         } else {
             Log.d(LOG_TAG, "Nincs bejelentkezett felhasználó!");
-            finish();
+            Intent roomIntent = new Intent(this,MainActivity.class);
+            startActivity(roomIntent);
         }
         mRecyclerView = findViewById(R.id.recyclerView);
         mRecyclerView.setLayoutManager(new GridLayoutManager(this, gridNumber));
@@ -79,7 +80,7 @@ public class RoomList extends AppCompatActivity {
 
     private void queryData() {
         mItemList.clear();
-
+    new Thread(()->{
         mItems.orderBy("hotel")
                 .limit(10)
                 .get()
@@ -95,6 +96,8 @@ public class RoomList extends AppCompatActivity {
                     }
                     rAdapter.notifyDataSetChanged();
                 });
+    }).start();
+
     }
 
     public boolean checkDate(Date endDay, Date firstday, Date startDay, Date lastday) {
@@ -106,85 +109,92 @@ public class RoomList extends AppCompatActivity {
 
         DocumentReference ref = mItems.document(item.getId());
 
-        ref.delete().addOnSuccessListener(success -> {
-            Log.d(LOG_TAG, "Töröltük" + item.getId());
-        }).addOnFailureListener(failure -> {
-            Toast.makeText(this, "Nem sikerült törölni ezt: " + item.getId(), Toast.LENGTH_SHORT).show();
-        }).addOnCompleteListener(task -> {
-            if (task.isSuccessful())
-                queryData();
-        });
+        new Thread(() -> {
+            ref.delete().addOnSuccessListener(success -> {
+                Log.d(LOG_TAG, "Töröltük" + item.getId());
+            }).addOnFailureListener(failure -> {
+                runOnUiThread(() -> {
+                    Toast.makeText(this, "Nem sikerült törölni ezt: " + item.getId(), Toast.LENGTH_SHORT).show();
+                });
+            }).addOnCompleteListener(task -> {
+                if (task.isSuccessful())
+                    queryData();
+            });
+        }).start();
     }
 
     public void reservation(RoomItem item, DatePicker firstday, DatePicker lastday) {
-        mReservations
-                .whereEqualTo("room_id", item.getId())
-                .get().addOnSuccessListener(queryDocumentSnapshots -> {
-                    boolean free = true;
-                    int yearFirst = firstday.getYear();
-                    int monthFirst = firstday.getMonth();
-                    int dayFirst = firstday.getDayOfMonth();
-                    Calendar calendarFirst = Calendar.getInstance();
-                    calendarFirst.set(yearFirst, monthFirst, dayFirst);
-                    calendarFirst.set(Calendar.HOUR_OF_DAY, 12);
-                    calendarFirst.set(Calendar.MINUTE, 0);
-                    Date startDay = calendarFirst.getTime();
+        new Thread(() ->{
+            mReservations
+                    .whereEqualTo("room_id", item.getId())
+                    .get().addOnSuccessListener(queryDocumentSnapshots -> {
+                        boolean free = true;
+                        int yearFirst = firstday.getYear();
+                        int monthFirst = firstday.getMonth();
+                        int dayFirst = firstday.getDayOfMonth();
+                        Calendar calendarFirst = Calendar.getInstance();
+                        calendarFirst.set(yearFirst, monthFirst, dayFirst);
+                        calendarFirst.set(Calendar.HOUR_OF_DAY, 12);
+                        calendarFirst.set(Calendar.MINUTE, 0);
+                        Date startDay = calendarFirst.getTime();
 
-                    int yearSecond = lastday.getYear();
-                    int monthSecond = lastday.getMonth();
-                    int daySecond = lastday.getDayOfMonth();
-                    Calendar calendarSecond = Calendar.getInstance();
-                    calendarFirst.set(yearSecond, monthSecond, daySecond);
-                    calendarSecond.set(Calendar.HOUR_OF_DAY, 7);
-                    calendarSecond.set(Calendar.MINUTE, 0);
-                    Date endDay = calendarSecond.getTime();
+                        int yearSecond = lastday.getYear();
+                        int monthSecond = lastday.getMonth();
+                        int daySecond = lastday.getDayOfMonth();
+                        Calendar calendarSecond = Calendar.getInstance();
+                        calendarFirst.set(yearSecond, monthSecond, daySecond);
+                        calendarSecond.set(Calendar.HOUR_OF_DAY, 7);
+                        calendarSecond.set(Calendar.MINUTE, 0);
+                        Date endDay = calendarSecond.getTime();
 
 
-                    long diffInMs = Math.abs(endDay.getTime() - startDay.getTime());
-                    long diffInDays = TimeUnit.MILLISECONDS.toDays(diffInMs);
-                    int full_price = ((int) diffInDays + 1) * item.getPrice();
+                        long diffInMs = Math.abs(endDay.getTime() - startDay.getTime());
+                        long diffInDays = TimeUnit.MILLISECONDS.toDays(diffInMs);
+                        int full_price = ((int) diffInDays + 1) * item.getPrice();
 
-                    if (!queryDocumentSnapshots.isEmpty()) {
-                        for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
-                            Reservation reservation = document.toObject(Reservation.class);
+                        if (!queryDocumentSnapshots.isEmpty()) {
+                            for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                                Reservation reservation = document.toObject(Reservation.class);
 
-                            System.out.println(startDay.getTime() + " " + reservation.firstday.getTime() + " " + endDay.getTime() + " " + reservation.lastday.getTime());
+                                System.out.println(startDay.getTime() + " " + reservation.firstday.getTime() + " " + endDay.getTime() + " " + reservation.lastday.getTime());
 
-                            if (!checkDate(endDay, reservation.firstday, startDay, reservation.lastday)) {
-                                free = false;
-                                break;
+                                if (!checkDate(endDay, reservation.firstday, startDay, reservation.lastday)) {
+                                    free = false;
+                                    break;
+                                }
                             }
-                        }
-                        if (free) {
-                            Reservation newReservation
-                                    = new Reservation(startDay, endDay, "", full_price, item.getHotel(), item.getId(), item.getType(), user.getEmail());
-                            mReservations.add(newReservation).addOnSuccessListener(documentReference -> {
-                                Log.d(LOG_TAG, "Sikerült a foglalás!");
-                                newReservation.setId(documentReference.getId());
-                                documentReference.set(newReservation);
-                                mNotificationHandler.send("Foglalás történt: " + newReservation.room_hotel);
-                            }).addOnFailureListener(e -> Log.d(LOG_TAG, "Nem sikerült a foglalás!"));
+                            if (free) {
+                                Reservation newReservation
+                                        = new Reservation(startDay, endDay, "", full_price, item.getHotel(), item.getId(), item.getType(), user.getEmail());
+                                mReservations.add(newReservation).addOnSuccessListener(documentReference -> {
+                                    Log.d(LOG_TAG, "Sikerült a foglalás!");
+                                    newReservation.setId(documentReference.getId());
+                                    documentReference.set(newReservation);
+                                    mNotificationHandler.send("Foglalás történt: " + newReservation.room_hotel);
+                                }).addOnFailureListener(e -> Log.d(LOG_TAG, "Nem sikerült a foglalás!"));
+                            } else {
+                                Log.d(LOG_TAG, "Foglalt a szoba!");
+                            }
                         } else {
-                            Log.d(LOG_TAG, "Foglalt a szoba!");
+
+                            if (endDay.getTime() <= startDay.getTime()) {
+
+                                Reservation newReservation
+                                        = new Reservation(startDay, endDay, "", full_price, item.getHotel(), item.getId(), item.getType(), user.getEmail());
+                                mReservations.add(newReservation).addOnSuccessListener(documentReference -> {
+                                    Log.d(LOG_TAG, "Sikerült a foglalás!");
+                                    newReservation.setId(documentReference.getId());
+                                    documentReference.set(newReservation);
+                                    mNotificationHandler.send("Foglalás történt: " + newReservation.room_hotel);
+                                }).addOnFailureListener(e -> Log.d(LOG_TAG, "Nem sikerült a foglalás!"));
+                            } else {
+                                Log.d(LOG_TAG, "Dátumok nem megfelelőek!");
+                            }
+
                         }
-                    } else {
+                    }).addOnFailureListener(e -> Log.e(LOG_TAG, "Nem sikerült a keresés"));
+        }).start();
 
-                        if (endDay.getTime() <= startDay.getTime()) {
-
-                            Reservation newReservation
-                                    = new Reservation(startDay, endDay, "", full_price, item.getHotel(), item.getId(), item.getType(), user.getEmail());
-                            mReservations.add(newReservation).addOnSuccessListener(documentReference -> {
-                                Log.d(LOG_TAG, "Sikerült a foglalás!");
-                                newReservation.setId(documentReference.getId());
-                                documentReference.set(newReservation);
-                                mNotificationHandler.send("Foglalás történt: " + newReservation.room_hotel);
-                            }).addOnFailureListener(e -> Log.d(LOG_TAG, "Nem sikerült a foglalás!"));
-                        } else {
-                            Log.d(LOG_TAG, "Dátumok nem megfelelőek!");
-                        }
-
-                    }
-                }).addOnFailureListener(e -> Log.e(LOG_TAG, "Nem sikerült a keresés"));
     }
 
     private void inicializeDate() {
@@ -235,7 +245,8 @@ public class RoomList extends AppCompatActivity {
             case R.id.logout:
                 Log.d(LOG_TAG, "onOptionsItemSelected: logout");
                 FirebaseAuth.getInstance().signOut();
-                finish();
+                Intent roomIntent = new Intent(this,MainActivity.class);
+                startActivity(roomIntent);
                 return true;
             case R.id.reservations:
                 Log.d(LOG_TAG, "onOptionsItemSelected: reservations");
