@@ -21,6 +21,13 @@
     <string name="utolsonap">lastday</string>
     <string name="fog">Foglalások</string>
     <string name="rooms">Szobák</string>
+    <string name="tipus">Tipus</string>
+    <string name="ar">1 éjszaka ára</string>
+    <string name="ca">Ország</string>
+    <string name="ci">Város</string>
+    <string name="ho">Hotel neve</string>
+    <string name="szo">Szoba hozzáadása</string>
+    <string name="add">Hozzáadás</string>
 
     <string-array name="room_item_hotel">
         <item>BudaiHotel</item>
