@@ -27,6 +27,11 @@
         android:icon="@drawable/bedroom"
         />
     <item
+        android:id="@+id/addR"
+        android:title="@string/szo"
+        app:showAsAction="never"
+        />
+    <item
         android:id="@+id/logout"
         android:title="@string/logout"
         app:showAsAction="never"

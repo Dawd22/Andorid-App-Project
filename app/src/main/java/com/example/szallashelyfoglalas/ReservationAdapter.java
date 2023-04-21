@@ -21,8 +21,8 @@ public class ReservationAdapter extends RecyclerView.Adapter<ReservationAdapter.
     private ArrayList<Reservation> mReservationDataAll;
     private Context mContext;
     private int lastPosition = -1;
-    ReservationAdapter(Context context, ArrayList<Reservation> data)
-    {
+
+    ReservationAdapter(Context context, ArrayList<Reservation> data) {
         this.mReservationData = data;
         this.mContext = context;
         this.mReservationDataAll = data;
@@ -32,14 +32,14 @@ public class ReservationAdapter extends RecyclerView.Adapter<ReservationAdapter.
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-       return new ViewHolder(LayoutInflater.from(mContext).inflate(R.layout.list_reservation,parent,false));
+        return new ViewHolder(LayoutInflater.from(mContext).inflate(R.layout.list_reservation, parent, false));
     }
 
     @Override
     public void onBindViewHolder(ReservationAdapter.ViewHolder holder, int position) {
         Reservation current = mReservationData.get(position);
         holder.bindTo(current);
-        if(holder.getAdapterPosition()>lastPosition){
+        if (holder.getAdapterPosition() > lastPosition) {
             Animation animation = AnimationUtils.loadAnimation(mContext, R.anim.slide_in_row);
             holder.itemView.startAnimation(animation);
             lastPosition = holder.getAdapterPosition();
@@ -55,19 +55,19 @@ public class ReservationAdapter extends RecyclerView.Adapter<ReservationAdapter.
     public Filter getFilter() {
         return ReservationFilter;
     }
+
     private Filter ReservationFilter = new Filter() {
         @Override
         protected FilterResults performFiltering(CharSequence charSequence) {
             ArrayList<Reservation> filteredList = new ArrayList<>();
             FilterResults results = new FilterResults();
-            if(charSequence == null ||charSequence.length()==0){
+            if (charSequence == null || charSequence.length() == 0) {
                 results.count = mReservationDataAll.size();
                 results.values = mReservationDataAll;
-            }
-            else{
+            } else {
                 String filterPattern = charSequence.toString().toLowerCase().trim();
-                for (Reservation item : mReservationDataAll){
-                    if(item.getRoom_hotel().toLowerCase().contains(filterPattern))
+                for (Reservation item : mReservationDataAll) {
+                    if (item.getRoom_hotel().toLowerCase().contains(filterPattern))
                         filteredList.add(item);
                 }
                 results.count = filteredList.size();
@@ -82,6 +82,7 @@ public class ReservationAdapter extends RecyclerView.Adapter<ReservationAdapter.
             notifyDataSetChanged();
         }
     };
+
     class ViewHolder extends RecyclerView.ViewHolder {
 
         private TextView mHotelText;

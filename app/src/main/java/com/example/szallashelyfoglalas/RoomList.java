@@ -248,6 +248,10 @@ public class RoomList extends AppCompatActivity {
                 Log.d(LOG_TAG, "onOptionsItemSelected: setting button");
                 roomToRoom();
                 return true;
+            case R.id.addR:
+                Log.d(LOG_TAG, "onOptionsItemSelected: setting button");
+                roomToAddRoom();
+                return true;
             case R.id.view_selector:
                 Log.d(LOG_TAG, "onOptionsItemSelected: view selector ");
                 if (viewRow) {
@@ -260,14 +264,22 @@ public class RoomList extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
-    public void roomToReservation(){
+
+    public void roomToAddRoom() {
+        Intent roomIntent = new Intent(this, RoomAdd.class);
+        startActivity(roomIntent);
+    }
+
+    public void roomToReservation() {
         Intent roomIntent = new Intent(this, Reservations.class);
         startActivity(roomIntent);
     }
-    public void roomToRoom(){
+
+    public void roomToRoom() {
         Intent roomIntent = new Intent(this, RoomList.class);
         startActivity(roomIntent);
     }
+
     private void changeSpanCount(MenuItem item, int drawable, int spanCount) {
         viewRow = !viewRow;
         item.setIcon(drawable);

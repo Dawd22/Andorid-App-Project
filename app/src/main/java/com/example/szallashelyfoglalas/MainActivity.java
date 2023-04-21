@@ -41,14 +41,13 @@ public class MainActivity extends AppCompatActivity {
     public void login(View view) {
         String email = userEmailET.getText().toString();
         String password = passwordET.getText().toString();
-        nAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+        nAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
-                if(task.isSuccessful()){
+                if (task.isSuccessful()) {
                     Log.d(LOG_TAG, "Sikeres bejelentkezni");
                     startRoom();
-                }
-                else {
+                } else {
                     Log.d(LOG_TAG, "Nem sikerült bejelentkezni");
                     Toast.makeText(MainActivity.this, "Nem sikerült bejelentkezni:" + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                 }
@@ -56,15 +55,16 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
+
     private void startRoom() {
         Intent roomIntent = new Intent(this, RoomList.class);
         startActivity(roomIntent);
 
     }
+
     public void signupPage(View view) {
         Intent signupIntent = new Intent(this, Signup.class);
         signupIntent.putExtra("SECRET_KEY", SECRET_KEY);
-        //TODO.
         startActivity(signupIntent);
     }
 

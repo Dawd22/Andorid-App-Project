@@ -6,6 +6,7 @@ import androidx.appcompat.widget.SearchView;
 import androidx.core.view.MenuItemCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -35,6 +36,7 @@ public class Reservations extends AppCompatActivity {
     private ArrayList<Reservation> mItemList;
 
     private static final String LOG_TAG = Reservations.class.getName();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,24 +59,26 @@ public class Reservations extends AppCompatActivity {
 
         queryData();
     }
+
     private void queryData() {
         mItemList.clear();
 
-        mReservations.whereEqualTo("user_email",user.getEmail())
+        mReservations.whereEqualTo("user_email", user.getEmail())
                 .limit(10)
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
-                    for (QueryDocumentSnapshot document : queryDocumentSnapshots){
+                    for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
                         Reservation item = document.toObject(Reservation.class);
                         item.setId(document.getId());
                         mItemList.add(item);
                     }
-                    if(mItemList.size() ==0){
+                    if (mItemList.size() == 0) {
                         roomToRoom();
                     }
                     rAdapter.notifyDataSetChanged();
                 });
     }
+
     public void deleteItem(Reservation item) {
 
         DocumentReference ref = mReservations.document(item.getId());
@@ -89,6 +93,7 @@ public class Reservations extends AppCompatActivity {
                 queryData();
         });
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.room_list_menu, menu);
@@ -129,6 +134,10 @@ public class Reservations extends AppCompatActivity {
                 Log.d(LOG_TAG, "onOptionsItemSelected: setting button");
                 roomToRoom();
                 return true;
+            case R.id.addR:
+                Log.d(LOG_TAG, "onOptionsItemSelected: setting button");
+                roomToAddRoom();
+                return true;
             case R.id.view_selector:
                 Log.d(LOG_TAG, "onOptionsItemSelected: view selector ");
                 if (viewRow) {
@@ -141,14 +150,22 @@ public class Reservations extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
-    public void roomToReservation(){
+
+    public void roomToAddRoom() {
+        Intent roomIntent = new Intent(this, RoomAdd.class);
+        startActivity(roomIntent);
+    }
+
+    public void roomToReservation() {
         Intent roomIntent = new Intent(this, Reservations.class);
         startActivity(roomIntent);
     }
-    public void roomToRoom(){
+
+    public void roomToRoom() {
         Intent roomIntent = new Intent(this, RoomList.class);
         startActivity(roomIntent);
     }
+
     private void changeSpanCount(MenuItem item, int drawable, int spanCount) {
         viewRow = !viewRow;
         item.setIcon(drawable);

@@ -10,22 +10,8 @@
         android:layout_height="match_parent"
         android:scrollbars="vertical"
         >
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/szo"
-            android:layout_marginTop="@dimen/lightmargin"
-            android:layout_marginRight="@dimen/lightmargin"
-            android:layout_marginLeft="@dimen/lightmargin"
-            android:textSize="20sp"
-            android:textColor="@color/design_default_color_secondary_variant"
-            android:id="@+id/szo"
-
-            />
-
         <EditText
             android:id="@+id/Hotel"
-            android:layout_below="@id/szo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
