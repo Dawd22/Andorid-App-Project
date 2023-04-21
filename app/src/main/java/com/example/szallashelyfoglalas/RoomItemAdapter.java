@@ -1,7 +1,6 @@
 package com.example.szallashelyfoglalas;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -128,6 +127,8 @@ public class RoomItemAdapter extends RecyclerView.Adapter<RoomItemAdapter.ViewHo
                             .reservation(currentItem, firstday, lastday));
 
         }
+
+
     }
 
 

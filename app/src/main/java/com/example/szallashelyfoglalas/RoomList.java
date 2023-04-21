@@ -7,14 +7,11 @@ import androidx.core.view.MenuItemCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.annotation.SuppressLint;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Intent;
-import android.content.res.TypedArray;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -23,16 +20,12 @@ import android.widget.Toast;
 
 import androidx.appcompat.widget.SearchView;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -184,6 +177,7 @@ public class RoomList extends AppCompatActivity {
                                 Log.d(LOG_TAG, "Sikerült a foglalás!");
                                 newReservation.setId(documentReference.getId());
                                 documentReference.set(newReservation);
+                                mNotificationHandler.send("Foglalás történt: " + newReservation.room_hotel);
                             }).addOnFailureListener(e -> Log.d(LOG_TAG, "Nem sikerült a foglalás!"));
                         } else {
                             Log.d(LOG_TAG, "Dátumok nem megfelelőek!");
@@ -191,10 +185,6 @@ public class RoomList extends AppCompatActivity {
 
                     }
                 }).addOnFailureListener(e -> Log.e(LOG_TAG, "Nem sikerült a keresés"));
-    }
-
-    public void updateItem(RoomItem item) {
-
     }
 
     private void inicializeDate() {
@@ -247,14 +237,16 @@ public class RoomList extends AppCompatActivity {
                 FirebaseAuth.getInstance().signOut();
                 finish();
                 return true;
-            case R.id.reservateions:
+            case R.id.reservations:
                 Log.d(LOG_TAG, "onOptionsItemSelected: reservations");
+                roomToReservation();
                 return true;
             case R.id.reservation:
                 Log.d(LOG_TAG, "onOptionsItemSelected: reservation");
                 return true;
-            case R.id.setting_button:
+            case R.id.room:
                 Log.d(LOG_TAG, "onOptionsItemSelected: setting button");
+                roomToRoom();
                 return true;
             case R.id.view_selector:
                 Log.d(LOG_TAG, "onOptionsItemSelected: view selector ");
@@ -268,7 +260,14 @@ public class RoomList extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
-
+    public void roomToReservation(){
+        Intent roomIntent = new Intent(this, Reservations.class);
+        startActivity(roomIntent);
+    }
+    public void roomToRoom(){
+        Intent roomIntent = new Intent(this, RoomList.class);
+        startActivity(roomIntent);
+    }
     private void changeSpanCount(MenuItem item, int drawable, int spanCount) {
         viewRow = !viewRow;
         item.setIcon(drawable);

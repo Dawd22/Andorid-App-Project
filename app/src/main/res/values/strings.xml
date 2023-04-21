@@ -17,6 +17,10 @@
     <string name="logout">Kijelentkezés</string>
     <string name="settings">Beállítások</string>
     <string name="delete">Törlés</string>
+    <string name="Elsonap">firstday</string>
+    <string name="utolsonap">lastday</string>
+    <string name="fog">Foglalások</string>
+    <string name="rooms">Szobák</string>
 
     <string-array name="room_item_hotel">
         <item>BudaiHotel</item>
