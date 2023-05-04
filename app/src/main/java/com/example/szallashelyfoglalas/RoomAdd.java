@@ -53,7 +53,14 @@ public class RoomAdd extends AppCompatActivity {
         String hotel = Hotel.getText().toString();
         String city = City.getText().toString();
         String country = Country.getText().toString();
-        int price = Integer.parseInt(Price.getText().toString());
+        String priceText = Price.getText().toString();
+        int price;
+        try {
+            price = Integer.parseInt(priceText);
+        } catch (NumberFormatException e) {
+            // A kapott szöveg nem szám, így 0 értéket adunk neki
+            price = 0;
+        }
         String type = Type.getText().toString();
         Location location = new Location(city, country);
         RoomItem newRoom = new RoomItem(hotel, "", location, price, type);
@@ -62,6 +69,8 @@ public class RoomAdd extends AppCompatActivity {
                 newRoom.setId(documentReference.getId());
                 documentReference.set(newRoom);
                 mNotificationHandler.send("Új szoba hozzáadása megtörtént!");
+                Intent roomIntent = new Intent(this, RoomList.class);
+                startActivity(roomIntent);
             }).addOnFailureListener(e -> {
                 Log.d(LOG_TAG, "Valami baj történt a hozzáadás során!");
             });
