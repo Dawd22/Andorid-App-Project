@@ -66,6 +66,7 @@ public class Signup extends AppCompatActivity {
         String password = passwordET.getText().toString();
         if (username.equals("") || username == null || email.equals("") || email == null || password.equals("") || password == null) {
             Log.d(LOG_TAG, "Figyelj oda pajtás hogy ne legyen üres");
+            Toast.makeText(this, "Nem lehet üresen hagyni a mezőket!", Toast.LENGTH_SHORT).show();
         } else {
             Log.i(LOG_TAG, "Regisztrált: " + email
                     + " Jelszó: "

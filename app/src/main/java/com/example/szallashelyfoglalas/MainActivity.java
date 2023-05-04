@@ -43,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
         String password = passwordET.getText().toString();
         if(email.equals("") || password.equals("") || email == null || password == null){
             Log.d(LOG_TAG,"Figyelj oda, hogy ne legyen üres barátom");
+            Toast.makeText(this, "Nem lehet üresen hagyni a mezőket!", Toast.LENGTH_SHORT).show();
         }
         else {
             nAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {

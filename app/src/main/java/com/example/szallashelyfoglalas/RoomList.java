@@ -142,7 +142,7 @@ public class RoomList extends AppCompatActivity {
                         int monthSecond = lastday.getMonth();
                         int daySecond = lastday.getDayOfMonth();
                         Calendar calendarSecond = Calendar.getInstance();
-                        calendarFirst.set(yearSecond, monthSecond, daySecond);
+                        calendarSecond.set(yearSecond, monthSecond, daySecond);
                         calendarSecond.set(Calendar.HOUR_OF_DAY, 7);
                         calendarSecond.set(Calendar.MINUTE, 0);
                         Date endDay = calendarSecond.getTime();
